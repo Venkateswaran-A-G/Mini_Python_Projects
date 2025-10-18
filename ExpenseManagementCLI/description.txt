@@ -1,0 +1,43 @@
+Expense Tracker CLI
+
+Description:
+The Expense Tracker CLI is a Python-based command-line application designed to help users manage their personal expenses efficiently. It allows users to add, view, search, update, delete, and summarize their expenses, all stored persistently in a CSV file.
+
+Key Features:
+
+1. Add Expense: Users can add new expenses by providing date, category, amount, and description. Each expense is automatically assigned a unique ID.
+2. View Expenses: Displays all recorded expenses in a neat tabular format.
+3. Search Expense by ID: Allows users to search for a specific expense using its unique ID.
+4. Update Expense: Users can modify existing expense details using the expense ID.
+5. Delete Expense: Users can delete an expense by providing its ID.
+6. Show Summary: Provides statistical insights, including total, average, maximum, and minimum expenses, as well as category-wise totals.
+
+Technologies Used:
+
+* Python: Core language for implementing the CLI.
+* Pandas: Handles CSV operations and DataFrame manipulations.
+* NumPy: Performs numerical and statistical calculations.
+* OS module: Checks file existence to ensure smooth file operations.
+
+How it Works:
+
+* Expenses are stored in a CSV file named 'expenses.csv'.
+* The program provides a menu-driven interface for CRUD operations.
+* Users interact with the CLI to manage their expenses.
+* Statistical calculations use NumPy for performance and accuracy.
+
+Usage:
+
+1. Run the Python script.
+2. Choose an option from the menu.
+3. Follow the prompts to add, view, search, update, delete, or view summaries of expenses.
+4. Exit the program when done.
+
+Benefits:
+
+* Keeps track of personal expenses efficiently.
+* Easy-to-use command-line interface.
+* Persistent data storage using CSV.
+* Provides useful statistical summaries for better financial insights.
+
+Ideal for individuals who want a simple, lightweight, and effective tool to manage daily expenses without relying on external software.
