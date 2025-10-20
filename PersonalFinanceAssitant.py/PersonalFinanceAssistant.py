@@ -41,7 +41,7 @@ def set_goals():
             set_goals()
         save_budget()
     except:
-        print("⚠️ Please enter valid numbers only!")        print("⚠️ Please enter valid numbers only!")
+        print("⚠️ Please enter valid numbers only!")
 
 def add_amount():
     global index
