@@ -1,18 +1,24 @@
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 import os
 
 file = "budget.csv"
 budget = {}
-income = {}
+income = {"Income":0}
 index = 0
 
 def load_csv():
+    global index
     if os.path.exists(file):
         df = pd.read_csv(file)
+        if not df.empty:
+            index = df['Sl.no'].max()
     else:
         df = pd.DataFrame(columns =["Sl.no","date","type","amount","payment_mode","description","Month"])
         df.to_csv(file,index=False)
+        index = 0
     return df
 
 def save_budget():
@@ -61,6 +67,7 @@ def add_amount():
     else:
         if new_desc in budget:
             budget[new_desc] -= new_amount
+            budget_summary()
             save_budget()
             print("✅ Expense added successfully!")
         else:
@@ -94,3 +101,49 @@ def view_amount():
                 print("⚠️ Invalid category name.")
         else:
             print("⚠️ Invalid filter type.")
+def budget_summary():
+    df = load_csv()
+    total_spent = income.get("Income", 0) - sum(budget.values())
+    print(f"💰 Total Amount Spent: ₹{total_spent:.2f}")
+    print("📊 Remaining Amount in every category:")
+
+    for desc, amt in budget.items():
+        print(f"{desc} : ₹{amt:.2f}")
+        if amt < 0:
+            print(f"⚠️ Warning!! You have exceeded your {desc} budget.")
+def monthly_analytics():
+    df = load_csv()
+    plt.figure(figsize=(10, 6))
+    sns.barplot(data=df, x="Month", y="amount", hue="description")
+    plt.title("Monthly Spending by Category")
+    plt.xlabel("Month")
+    plt.ylabel("Amount (₹)")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+def main():
+    while(1):
+        print("___________Menu__________")
+        print("1.Set Budget Goals")
+        print("2.Add income/expense.")
+        print("3.Veiw Expenses")
+        print("4.Budget Summary")
+        print("5.Monthly Analytics")
+        print("6.Exit")
+        ch = int(input("Enter your choice: "))
+        if ch == 1:
+            set_goals()
+        elif ch == 2:
+            add_amount()
+        elif ch == 3:
+            view_amount()
+        elif ch == 4:
+            budget_summary()
+        elif ch==5:
+            monthly_analytics()
+        elif ch == 6:
+            exit(0)
+        else:
+            print("Invalid Choice")
+main()
