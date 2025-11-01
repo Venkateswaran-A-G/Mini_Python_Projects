@@ -4,10 +4,28 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 
-file = "budget.csv"
+file = "C:/Users/Venkateswaran .A. G/OneDrive/Documents/GitHub/Mini_Python_Projects/PersonalFinanceAssitant.py/budget.csv"
 budget = {}
 income = {"Income":0}
 index = 0
+from datetime import datetime
+
+month_tracker_file = "C:/Users/Venkateswaran .A. G/OneDrive/Documents/GitHub/Mini_Python_Projects/PersonalFinanceAssitant.py/month_tracker.csv"
+
+def get_current_month():
+    return datetime.now().strftime("%B")
+
+def is_new_month():
+    if os.path.exists(month_tracker_file):
+        df = pd.read_csv(month_tracker_file)
+        last_month = df.iloc[0]['Month']
+        return last_month != get_current_month()
+    else:
+        return True
+
+def update_month_tracker():
+    df = pd.DataFrame([{"Month": get_current_month()}])
+    df.to_csv(month_tracker_file, index=False)
 
 def load_csv():
     global index
@@ -23,31 +41,39 @@ def load_csv():
 
 def save_budget():
     df = pd.DataFrame(list(budget.items()), columns=['Category', 'Budget'])
-    df.to_csv("budget_goals.csv", index=False)
+    df.to_csv("C:/Users/Venkateswaran .A. G/OneDrive/Documents/GitHub/Mini_Python_Projects/PersonalFinanceAssitant.py/budget_goals.csv", index=False)
     print("✅ Budget goals saved successfully!")
     
 def save_income():
     df = pd.DataFrame(list(income.items()), columns=['Type', 'Amount'])
-    df.to_csv("Income.csv", index=False)
+    df.to_csv("C:/Users/Venkateswaran .A. G/OneDrive/Documents/GitHub/Mini_Python_Projects/PersonalFinanceAssitant.py/Income.csv", index=False)
     print("✅ Income saved successfully!")
     
 def set_goals():
     load_csv()
+    if not is_new_month():
+        print(f"✅ Budget goals already set for {get_current_month()}. Skipping setup.")
+        return
+
     try:
-        income["Income"] = float(input("Enter  you total Income: "))
+        income["Income"] = float(input("Enter your total Income: "))
         save_income()
-        budget["Food"]= float(input("Enter the budget for 'Food & Groceries' category: "))
-        budget["Travel"]= float(input("Enter the budget for 'Travel' category: "))
-        budget["Entertainment"]= float(input("Enter the budget for 'Entertainment' category: "))
-        budget["Shopping"]=float(input("Enter the budget for 'Shopping' category: "))
+        budget["Food"] = float(input("Enter the budget for 'Food & Groceries' category: "))
+        budget["Travel"] = float(input("Enter the budget for 'Travel' category: "))
+        budget["Entertainment"] = float(input("Enter the budget for 'Entertainment' category: "))
+        budget["Shopping"] = float(input("Enter the budget for 'Shopping' category: "))
+
         if sum(budget.values()) > income["Income"]:
-            print("Your budget is greater than your total income!!!")
+            print("⚠️ Your budget exceeds your total income!")
             print("Please set a proper budget according to your income.")
             budget.clear()
-            set_goals()
+            return set_goals()
+
         save_budget()
+        update_month_tracker()
     except:
         print("⚠️ Please enter valid numbers only!")
+        return set_goals()
 
 def add_amount():
     global index
@@ -124,17 +150,22 @@ def monthly_analytics():
 
 def main():
     print("Welcome to Personal Finance Assistant!")
-    if not os.path.exists("budget_goals.csv") or not os.path.exists("Income.csv"):
-        print("Let's set up your budget goals and income first.")
-        set_goals() 
-        
-    while(1):
+    load_csv()
+
+    if is_new_month():
+        print(f"🗓️ New month detected: {get_current_month()}")
+        print("Let's set up your budget goals and income.")
+        set_goals()
+    else:
+        print(f"✅ Continuing with budget goals for {get_current_month()}")
+
+    while True:
         print("___________Menu__________")
-        print("1.Add income/expense.")
-        print("2.Veiw Expenses")
-        print("3.Budget Summary")
-        print("4.Monthly Analytics")
-        print("5.Exit")
+        print("1. Add income/expense.")
+        print("2. View Expenses")
+        print("3. Budget Summary")
+        print("4. Monthly Analytics")
+        print("5. Exit")
         ch = int(input("Enter your choice: "))
         if ch == 1:
             add_amount()
@@ -142,7 +173,7 @@ def main():
             view_amount()
         elif ch == 3:
             budget_summary()
-        elif ch==4:
+        elif ch == 4:
             monthly_analytics()
         elif ch == 5:
             exit(0)

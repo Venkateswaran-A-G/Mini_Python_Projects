@@ -1,1 +1,4 @@
 Sl.no,date,type,amount,payment_mode,description,Month
+1,2025/10/22,Income,25000.0,bank,salary,October
+2,2025/11/01,Expense,5000.0,Gpay,Travel,November
+2,2025/11/01,Expense,500.0,Gpay,Food,November
