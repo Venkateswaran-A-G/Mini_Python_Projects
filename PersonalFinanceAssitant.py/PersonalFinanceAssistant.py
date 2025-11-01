@@ -123,26 +123,28 @@ def monthly_analytics():
     plt.show()
 
 def main():
+    print("Welcome to Personal Finance Assistant!")
+    if not os.path.exists("budget_goals.csv") or not os.path.exists("Income.csv"):
+        print("Let's set up your budget goals and income first.")
+        set_goals() 
+        
     while(1):
         print("___________Menu__________")
-        print("1.Set Budget Goals")
-        print("2.Add income/expense.")
-        print("3.Veiw Expenses")
-        print("4.Budget Summary")
-        print("5.Monthly Analytics")
-        print("6.Exit")
+        print("1.Add income/expense.")
+        print("2.Veiw Expenses")
+        print("3.Budget Summary")
+        print("4.Monthly Analytics")
+        print("5.Exit")
         ch = int(input("Enter your choice: "))
         if ch == 1:
-            set_goals()
-        elif ch == 2:
             add_amount()
-        elif ch == 3:
+        elif ch == 2:
             view_amount()
-        elif ch == 4:
+        elif ch == 3:
             budget_summary()
-        elif ch==5:
+        elif ch==4:
             monthly_analytics()
-        elif ch == 6:
+        elif ch == 5:
             exit(0)
         else:
             print("Invalid Choice")
