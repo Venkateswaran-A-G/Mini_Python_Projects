@@ -5,3 +5,4 @@ Sl.no,date,type,amount,payment_mode,description,Month
 3,2025/11/04,Income,50000.0,Bank,Salary,November
 4,2025/10/25,Expense ,5000.0,Gpay,Food,October
 5,2025/10/25,Expense,5000.0,Gpay,Food,October
+5,2025/10/15,Expense,15000.0,Gpay,Travel,October
