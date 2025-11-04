@@ -38,6 +38,14 @@ def load_csv():
         df.to_csv(file,index=False)
         index = 0
     return df
+def load_budget():
+    global budget
+    budget_file = "C:/Users/Venkateswaran .A. G/OneDrive/Documents/GitHub/Mini_Python_Projects/PersonalFinanceAssitant.py/budget_goals.csv"
+    if os.path.exists(budget_file):
+        df = pd.read_csv(budget_file)
+        budget = dict(zip(df['Category'], df['Budget']))
+    else:
+        budget = {}
 
 def save_budget():
     df = pd.DataFrame(list(budget.items()), columns=['Category', 'Budget'])
@@ -129,14 +137,17 @@ def view_amount():
             print("⚠️ Invalid filter type.")
 def budget_summary():
     df = load_csv()
-    total_spent = income.get("Income", 0) - sum(budget.values())
+    total_spent = df[df["type"].str.lower() == "expense"]["amount"].sum()
     print(f"💰 Total Amount Spent: ₹{total_spent:.2f}")
+    
     print("📊 Remaining Amount in every category:")
-
-    for desc, amt in budget.items():
-        print(f"{desc} : ₹{amt:.2f}")
-        if amt < 0:
+    for desc, limit in budget.items():
+        spent = df[(df["description"] == desc) & (df["type"].str.lower() == "expense")]["amount"].sum()
+        remaining = limit - spent
+        print(f"{desc}: ₹{remaining:.2f}")
+        if remaining < 0:
             print(f"⚠️ Warning!! You have exceeded your {desc} budget.")
+
 def monthly_analytics():
     df = load_csv()
     plt.figure(figsize=(10, 6))
@@ -151,7 +162,7 @@ def monthly_analytics():
 def main():
     print("Welcome to Personal Finance Assistant!")
     load_csv()
-
+    load_budget()
     if is_new_month():
         print(f"🗓️ New month detected: {get_current_month()}")
         print("Let's set up your budget goals and income.")
